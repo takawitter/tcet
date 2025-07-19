@@ -72,14 +72,14 @@ mc.addEventListener("notify2", ({detail})=>{
 ### Defining event listener
 
 ```ts
-import { TypedCustomEventTarget, TypedCustomEventListenerOrEventListnerObject } from "tcet";
+import { TypedCustomEventListenerOrObject, TypedCustomEventTarget } from "tcet";
 
 // Detail information definition
 interface HelloDetail{
   message: string;
 }
 
-type HelloListener = TypedCustomEventListenerOrEventListnerObject<MyClass>;
+type HelloListener = TypedCustomEventListenerOrObject<MyClass, HelloDetail>;
 
 class MyClass extends TypedCustomEventTarget<MyClass, {
   hello: HelloDetail
@@ -90,7 +90,7 @@ class MyClass extends TypedCustomEventTarget<MyClass, {
 }
 
 // You can use listener definition when you need it such as the case you need to remove listener later.
-const listner: HelloListener = ({detail: message})=>{
+const listner: HelloListener = ({detail: {message}})=>{
   console.log(message);
 };
 const mc = new MyClass();
