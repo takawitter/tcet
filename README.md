@@ -21,7 +21,7 @@ to use event mechanisms.
   * type must be one of the key string of Events and detail must be a value of key in Events which was passed to the type parameter T of TypedCustomEvent.
 
 ## Install
-
+(will be available at Jul. 21)
 ```bash
 npm i tcet
 ```
