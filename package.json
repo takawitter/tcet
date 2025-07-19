@@ -1,0 +1,51 @@
+{
+  "name": "tcet",
+  "version": "1.0.0",
+  "description": "Typed Custom Event Target - yet another typed event target with strongly typed classes and properties.",
+  "main": "dist/tcet.umd.js",
+  "module": "dist/tcet.es.js",
+  "types": "types/tcet.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/tcet.d.ts",
+      "import": "./dist/tcet.es.js",
+      "require": "./dist/tcet.umd.js"
+    }
+  },
+  "type": "module",
+  "files": [
+    "dist",
+    "src",
+    "types",
+    "LICENSE",
+    "package-lock.json",
+    "package.json",
+    "README.md",
+    "tsconfig.json",
+    "vite.config.ts"
+  ],
+  "scripts": {
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/takawitter/tcet.git"
+  },
+  "keywords": [
+    "typescript",
+    "event target"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/takawitter/tcet/issues"
+  },
+  "homepage": "https://github.com/takawitter/tcet",
+  "devDependencies": {
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  },
+  "dependencies": {}
+}
