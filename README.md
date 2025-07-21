@@ -14,11 +14,11 @@ to use event mechanisms.
 ## Features
 
 * typed currentTarget (TypedCustomEvent<T, D>.currentTarget)
-  * currentTarget field is always typed as source class. 
+  * The currentTarget field is always typed as the source class. 
 * typed dispatchCustomEvent (TypedCustomEventTarget<T, Events>.dispatchEvent)
-  * dispatchCustomEvent is defined as overrload method. parameters (event type and detail object) are restricted as one of Events defiintions.
+  * dispatchCustomEvent is defined as overrload method. parameters (event type and detail object) are restricted to one of Events defiintions.
 * simplified parameters of dispatchCustomEvent(type: string, detail: D)
-  * type must be one of the key string of Events and detail must be a value of key in Events which was passed to the type parameter T of TypedCustomEvent.
+  * type must be one of the key string of Events and detail must be a value of key in Events that was passed to TypedCustomEventTarget as the type parameter.
 
 ## Install
 (will be available at Jul. 21)
