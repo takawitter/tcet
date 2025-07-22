@@ -2,6 +2,10 @@
 
 TypedCustomEventTarget(tcet) - Yet another event target with strictly typed classes and methods.
 
+[![Current Release](https://img.shields.io/npm/v/tcet.svg)](https://www.npmjs.com/package/tcet)
+[![Licence](https://img.shields.io/github/license/takawitter/tcet.svg)](https://github.com/takawitter/tcet/blob/master/LICENSE)
+
+
 ## Motivation
 
 Some classes or types of existing EventTarget or related libraries have
