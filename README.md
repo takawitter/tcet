@@ -1,27 +1,25 @@
 # tcet
 
-TypedCustomEventTarget(tcet) - yet another typed event target with strictly typed classes and methods.
-
-This is a Strictly typed version of EventTarget.
+TypedCustomEventTarget(tcet) - Yet another event target with strictly typed classes and methods.
 
 ## Motivation
 
 Some classes or types of existing EventTarget or related libraries have
 untyped entities such as Event.currentTarget or EventTarget.dispatchEvent.
-This library provides more strictly-typed entities and simplified interface
+This library provides more strictly-typed entities with simplified interface
 to use event mechanisms.
 
 ## Features
 
-* typed currentTarget (TypedCustomEvent<T, D>.currentTarget)
+* Typed currentTarget field (TypedCustomEvent<T, D>.currentTarget)
   * The currentTarget field is always typed as the source class. 
-* typed dispatchCustomEvent (TypedCustomEventTarget<T, Events>.dispatchEvent)
-  * dispatchCustomEvent is defined as overrload method. parameters (event type and detail object) are restricted to one of Events defiintions.
-* simplified parameters of dispatchCustomEvent(type: string, detail: D)
-  * type must be one of the key string of Events and detail must be a value of key in Events that was passed to TypedCustomEventTarget as the type parameter.
+* Typed dispatch method (TypedCustomEventTarget<T, Events>.dispatchCustomEvent)
+  * dispatchCustomEvent is defined as overrload method. Parameters (event type and detail object) are restricted to one of Events defiintions.
+* Simplified parameters of dispatchCustomEvent(type: string, detail: D)
+  * `type` must be one of the key string of Events and `detail` must be a value of key in Events that was passed to TypedCustomEventTarget as the type parameter.
 
 ## Install
-(will be available at Jul. 21)
+
 ```bash
 npm i tcet
 ```

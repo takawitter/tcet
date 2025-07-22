@@ -7,7 +7,7 @@
  * @template D the detail type of the Event.
  */
 export interface TypedCustomEvent<T extends TypedCustomEventTarget<T, any>, D> extends CustomEvent<D>{
-	readonly currentTarget: T;
+    readonly currentTarget: T;
 }
 
 /**
@@ -37,7 +37,7 @@ export interface TypedCustomEventListenerObject<T extends TypedCustomEventTarget
  * @template D the detail type of the Event.
  */
 export type TypedCustomEventListenerOrObject<T extends TypedCustomEventTarget<T, any>, D> =
-	TypedCustomEventListener<T, D> | TypedCustomEventListenerObject<T, D>;
+    TypedCustomEventListener<T, D> | TypedCustomEventListenerObject<T, D>;
 
 /**
  * Strictly typed version of EventTarget.
@@ -68,22 +68,26 @@ export type TypedCustomEventListenerOrObject<T extends TypedCustomEventTarget<T,
  * })
  * ```
  */
-export interface TypedCustomEventTarget<T extends TypedCustomEventTarget<T, Events>, Events extends Record<string, any>>
+export interface TypedCustomEventTarget<
+    T extends TypedCustomEventTarget<T, Events>,
+    Events extends Record<string, any>>
 extends EventTarget {
     addEventListener<K extends keyof Events & string>(
         type: K, listener: TypedCustomEventListenerOrObject<T, Events[K]> | null,
         options?: AddEventListenerOptions | boolean): void;
 
-	removeEventListener<K extends keyof Events & string>(
+    removeEventListener<K extends keyof Events & string>(
         type: K, listener: TypedCustomEventListenerOrObject<T, Events[K]> | null,
         options?: EventListenerOptions | boolean): void;
 
-	dispatchCustomEvent<K extends keyof Events & string>(
+    dispatchCustomEvent<K extends keyof Events & string>(
         type: K, detail?: Events[K]): boolean;
 }
-export class TypedCustomEventTarget<T extends TypedCustomEventTarget<T, Events>, Events extends Record<string, any>>
+export class TypedCustomEventTarget<
+    T extends TypedCustomEventTarget<T, Events>,
+    Events extends Record<string, any>>
 extends EventTarget {
-	dispatchCustomEvent(type: string, detail: any){
-		return super.dispatchEvent(new CustomEvent(type, {detail}));
-	}
+    dispatchCustomEvent(type: string, detail: any){
+        return super.dispatchEvent(new CustomEvent(type, {detail}));
+    }
 }
