@@ -1,6 +1,6 @@
-# tcet
+# TypedCustomEventTarget(tcet).
 
-TypedCustomEventTarget(tcet). Strictly typed [EventTarget](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget), with typed `currentTarget` and `detail` fields, and typed `add/remove/dispatch` methods.
+A strictly typed [EventTarget](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget), with typed `currentTarget` and `detail` fields, and typed `add/remove/dispatch` methods.
 
 [![Current Release](https://img.shields.io/npm/v/tcet.svg)](https://www.npmjs.com/package/tcet)
 [![Licence](https://img.shields.io/github/license/takawitter/tcet.svg)](https://github.com/takawitter/tcet/blob/master/LICENSE)
