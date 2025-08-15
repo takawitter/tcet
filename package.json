@@ -1,6 +1,6 @@
 {
   "name": "tcet",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Typed Custom Event Target - yet another typed event target with strongly typed classes and properties.",
   "main": "dist/tcet.umd.js",
   "module": "dist/tcet.es.js",
