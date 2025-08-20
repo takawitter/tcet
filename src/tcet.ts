@@ -6,7 +6,8 @@
  * @template T the class which dispatched this Event.
  * @template D the detail type of the Event.
  */
-export interface TypedCustomEvent<T extends TypedCustomEventTarget<T, any>, D> extends CustomEvent<D>{
+export interface TypedCustomEvent<T extends TypedCustomEventTarget<T, any>, D = void>
+extends CustomEvent<D>{
     readonly currentTarget: T;
 }
 
@@ -16,7 +17,7 @@ export interface TypedCustomEvent<T extends TypedCustomEventTarget<T, any>, D> e
  * @template T the class which dispatched this Event.
  * @template D the detail type of the Event.
  */
-export interface TypedCustomEventListener<T extends TypedCustomEventTarget<T, any>, D>{
+export interface TypedCustomEventListener<T extends TypedCustomEventTarget<T, any>, D = void>{
     (this: T, evt: TypedCustomEvent<T, D>): void | Promise<void>;
 }
 
@@ -26,17 +27,17 @@ export interface TypedCustomEventListener<T extends TypedCustomEventTarget<T, an
  * @template T the class which dispatched this Event.
  * @template D the detail type of the Event.
  */
-export interface TypedCustomEventListenerObject<T extends TypedCustomEventTarget<T, any>, D>{
+export interface TypedCustomEventListenerObject<T extends TypedCustomEventTarget<T, any>, D = void>{
     handleEvent(evt: TypedCustomEvent<T, D>): void | Promise<void>;
 }
 
 /**
  * A convenient definition for event listeners.
  * 
- * @template T the class which dispatched this Event.
- * @template D the detail type of the Event.
+ * @template T the class of instance which dispatched this Event.
+ * @template D the type of the detail of the Event.
  */
-export type TypedCustomEventListenerOrObject<T extends TypedCustomEventTarget<T, any>, D> =
+export type TypedCustomEventListenerOrObject<T extends TypedCustomEventTarget<T, any>, D = void> =
     TypedCustomEventListener<T, D> | TypedCustomEventListenerObject<T, D>;
 
 /**
