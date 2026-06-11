@@ -43,6 +43,28 @@ mc.addEventListener('hello', helloListener);
 mc.removeEventListener('hello', helloListener);
 ```
 
+## コード補完とタイプヒントの例
+
+### dispatchCustomEvent
+
+![dispatchCustomEvent](./images/completion_dispatchCustomEvent.png)
+
+### addEventListener
+
+![addEventListener](./images/completion_addEventListener.png)
+
+### detail field of event
+
+![detailOfEvent](./images/hint_detail.png)
+
+### currentTarget field of event
+
+![currentTargetOfEvent](./images/hint_currentTarget.png)
+
+### type field of event
+
+![typeOfEvent](./images/hint_type.png)
+
 ## 特徴
 
 TypeScriptの `EventTarget` をベースに、以下の拡張を行っています。
