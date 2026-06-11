@@ -20,7 +20,7 @@ to use event mechanism.
 Define event target class that extends `TypedCustomEventTarget` and give self type and events definition as the value of type parameter.
 Then, strongly typed definitions including `addEventListener` or other methods will be defined automatically.
 
-```
+```ts
 class MyClass extends TypedCustomEventTarget<MyClass, {hello: string}>{
   func(){
     // dispatchCustomEvent accepts event type and detail value those defined as the second parameter of TypedCustomEventTarget.
