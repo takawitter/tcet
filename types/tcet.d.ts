@@ -67,10 +67,11 @@ export type TypedCustomEventListenerOrEventListenerObject<T extends TypedCustomE
 export interface TypedCustomEventTarget<T extends TypedCustomEventTarget<T, Events>, Events extends Record<string, any>> extends EventTarget {
     addEventListener<K extends keyof Events & string>(type: K, listener: TypedCustomEventListenerOrEventListenerObject<T, K> | null, options?: AddEventListenerOptions | boolean): void;
     removeEventListener<K extends keyof Events & string>(type: K, listener: TypedCustomEventListenerOrEventListenerObject<T, K> | null, options?: EventListenerOptions | boolean): void;
-    dispatchCustomEvent<K extends keyof Events & string>(type: K, detail?: Events[K]): boolean;
 }
+type EventArgs<T> = [T] extends [void] ? [] : [detail: T];
 export declare class TypedCustomEventTarget<T extends TypedCustomEventTarget<T, Events>, Events extends Record<string, any>> extends EventTarget {
     readonly __eventsType: Events;
+    dispatchCustomEvent<K extends keyof Events & string>(type: K, ...args: EventArgs<Events[K]>): boolean;
 }
 /**
  * An utility type that extract events type from event source type.
@@ -133,4 +134,5 @@ export type EventDetailOf<T, K extends keyof EventsOf<T> & string> = T extends T
  * ```
  */
 export type ListenerFor<T extends TypedCustomEventTarget<T, EventsOf<T>>, K extends keyof EventsOf<T> & string> = TypedCustomEventListenerOrEventListenerObject<T, K>;
+export {};
 //# sourceMappingURL=tcet.d.ts.map

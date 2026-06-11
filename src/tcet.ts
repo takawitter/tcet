@@ -77,21 +77,19 @@ extends EventTarget {
     addEventListener<K extends keyof Events & string>(
         type: K, listener: TypedCustomEventListenerOrEventListenerObject<T, K> | null,
         options?: AddEventListenerOptions | boolean): void;
-
     removeEventListener<K extends keyof Events & string>(
         type: K, listener: TypedCustomEventListenerOrEventListenerObject<T, K> | null,
         options?: EventListenerOptions | boolean): void;
-
-    dispatchCustomEvent<K extends keyof Events & string>(
-        type: K, detail?: Events[K]): boolean;
 }
+type EventArgs<T> = [T] extends [void] ? [] : [detail: T];
 export class TypedCustomEventTarget<
     T extends TypedCustomEventTarget<T, Events>,
     Events extends Record<string, any>>
 extends EventTarget {
     declare readonly __eventsType: Events;
-    dispatchCustomEvent(type: string, detail: any){
-        return super.dispatchEvent(new CustomEvent(type, {detail}));
+    dispatchCustomEvent<K extends keyof Events & string>(
+        type: K, ...args: EventArgs<Events[K]>): boolean{
+        return super.dispatchEvent(new CustomEvent(type, ...args));
     }
 }
 
