@@ -20,7 +20,7 @@
 イベントを発生させるクラスで `TypedCustomEventTarget` を継承し、型引数に自身の型とイベント名と詳細情報を定義した型を渡してください。
 すると、`addEventListener` などのメソッドが、それに渡すリスナーにまで型情報が付与された状態で定義されます。
 
-```
+```ts
 class MyClass extends TypedCustomEventTarget<MyClass, {hello: string}>{
   func(){
     this.dispatchCustomEvent('hello', 'world');
