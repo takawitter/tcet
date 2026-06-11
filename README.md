@@ -104,13 +104,13 @@ In this example, `notify1` and `notify2` are event types, and `string` and `numb
 import { TypedCustomEventTarget } from "tcet";
 
 class MyClass extends TypedCustomEventTarget<MyClass, MyClassEvents>{
-  function f1(){
+  f1(){
     // You can fire event by calling dispatchCustomEvent.
     // This is effectively same as dispatchEvent(new CustomEvent("notify1", "hello")).
     // Code completion available from IDE(i.e. VSCode).
     this.dispatchCustomEvent("notify1", "hello");
   }
-  function f2(){
+  f2(){
     this.dispatchCustomEvent("notify2", 100);
   }
 }
@@ -142,7 +142,7 @@ class MyClass extends TypedCustomEventTarget<MyClass, {
     message: string;
   }
 }>{
-  function f1(){
+  f1(){
     this.dispatchCustomEvent("hello", {message: "hello"});
   }
 }

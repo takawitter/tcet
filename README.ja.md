@@ -103,13 +103,13 @@ interface MyClassEvents{
 import { TypedCustomEventTarget } from "tcet";
 
 class MyClass extends TypedCustomEventTarget<MyClass, MyClassEvents>{
-  function f1(){
+  f1(){
     // `dispatchCustomEvent` を呼ぶと、イベントを発生させられます。
     // これは `dispatchEvent(new CustomEvent("notify1", "hello"))` を実行するのと同じです。
     // tcetによる型付けにより、IDE(VSCode等)でコード補完が効きます。
     this.dispatchCustomEvent("notify1", "hello");
   }
-  function f2(){
+  f2(){
     this.dispatchCustomEvent("notify2", 100);
   }
 }
@@ -141,7 +141,7 @@ class MyClass extends TypedCustomEventTarget<MyClass, {
     message: string;
   }
 }>{
-  function f1(){
+  f1(){
     this.dispatchCustomEvent("hello", {message: "hello"});
   }
 }
