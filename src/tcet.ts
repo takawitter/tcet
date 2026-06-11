@@ -161,3 +161,13 @@ export type EventDetailOf<T, K extends keyof EventsOf<T> & string> =
 //    T extends TypedCustomEventTarget<any, any> ? TypedCustomEventListenerOrObject<T, K> : never;
 export type ListenerFor<T extends TypedCustomEventTarget<T, EventsOf<T>>, K extends keyof EventsOf<T> & string> =
     TypedCustomEventListenerOrEventListenerObject<T, K>;
+
+// CustomEvent related type definitions
+export interface CustomEventListener<D>{
+    (evt: CustomEvent<D>): void;
+}
+export interface CustomEventListenerObject<D>{
+    handleEvent(object: CustomEvent<D>): void;
+}
+export type CustomEventListenerOrEventListenerObject<D> =
+    CustomEventListener<D> | CustomEventListenerObject<D>;
