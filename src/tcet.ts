@@ -6,9 +6,13 @@
  * @template T the class that dispatched and the source of this Event.
  * @template K the event type of the Event.
  */
-export interface TypedCustomEvent<T extends TypedCustomEventTarget<T, Record<string, any>>, K extends keyof EventsOf<T> & string>
-extends CustomEvent<EventDetailOf<T, K>>{
-    type: K;
+export interface TypedCustomEvent<
+    T extends TypedCustomEventTarget<any, any>,
+    K extends keyof EventsOf<T> & string
+    >
+    extends CustomEvent<EventDetailOf<T, K>>
+{
+    readonly type: K;
     readonly currentTarget: T;
 }
 
@@ -18,7 +22,10 @@ extends CustomEvent<EventDetailOf<T, K>>{
  * @template T the class that dispatched and the source of this Event.
  * @template K the detail type of the Event.
  */
-export interface TypedCustomEventListener<T extends TypedCustomEventTarget<T, Record<string, any>>, K extends keyof EventsOf<T> & string>{
+export interface TypedCustomEventListener<
+    T extends TypedCustomEventTarget<any, any>,
+    K extends keyof EventsOf<T> & string>
+{
     (this: T, evt: TypedCustomEvent<T, K>): void | Promise<void>;
 }
 
@@ -28,7 +35,10 @@ export interface TypedCustomEventListener<T extends TypedCustomEventTarget<T, Re
  * @template T the class that dispatched and the source of this Event.
  * @template K the detail type of the Event.
  */
-export interface TypedCustomEventListenerObject<T extends TypedCustomEventTarget<T, Record<string, any>>, K extends keyof EventsOf<T> & string>{
+export interface TypedCustomEventListenerObject<
+    T extends TypedCustomEventTarget<any, any>,
+    K extends keyof EventsOf<T> & string>
+{
     handleEvent(evt: TypedCustomEvent<T, K>): void | Promise<void>;
 }
 
@@ -38,8 +48,10 @@ export interface TypedCustomEventListenerObject<T extends TypedCustomEventTarget
  * @template T the class of instance that dispatched and the source of this Event.
  * @template K the detail type of the Event.
  */
-export type TypedCustomEventListenerOrEventListenerObject<T extends TypedCustomEventTarget<T, Record<string, any>>, K extends keyof EventsOf<T> & string> =
-    TypedCustomEventListener<T, K> | TypedCustomEventListenerObject<T, K>;
+export type TypedCustomEventListenerOrEventListenerObject<
+    T extends TypedCustomEventTarget<any, any>,
+    K extends keyof EventsOf<T> & string
+    > = TypedCustomEventListener<T, K> | TypedCustomEventListenerObject<T, K>;
 
 /**
  * Strictly typed version of EventTarget.
@@ -72,8 +84,8 @@ export type TypedCustomEventListenerOrEventListenerObject<T extends TypedCustomE
  */
 export interface TypedCustomEventTarget<
     T extends TypedCustomEventTarget<T, Events>,
-    Events extends Record<string, any>>
-extends EventTarget {
+    Events extends Record<string, any>
+> extends EventTarget {
     addEventListener<K extends keyof Events & string>(
         type: K, listener: TypedCustomEventListenerOrEventListenerObject<T, K> | null,
         options?: AddEventListenerOptions | boolean): void;
@@ -84,8 +96,8 @@ extends EventTarget {
 type EventArgs<T> = [T] extends [void] ? [] : [detail: T];
 export class TypedCustomEventTarget<
     T extends TypedCustomEventTarget<T, Events>,
-    Events extends Record<string, any>>
-extends EventTarget {
+    Events extends Record<string, any>
+> extends EventTarget {
     declare readonly __eventsType: Events;
     dispatchCustomEvent<K extends keyof Events & string>(
         type: K, ...args: EventArgs<Events[K]>): boolean{
@@ -112,8 +124,8 @@ extends EventTarget {
  * // class MyClass extends TypedCustomEventTarget<MyClass, {notify1: string}>.
  * ```
  */
-export type EventsOf<T> =
-    T extends TypedCustomEventTarget<any, infer Events extends Record<string, any>> ? Events : never;
+export type EventsOf<T extends TypedCustomEventTarget<any, any>> =
+    T extends TypedCustomEventTarget<any, infer Events> ? Events : never;
 
 /**
  * An utility type that extract event detail type from event source type and event name.
@@ -134,8 +146,10 @@ export type EventsOf<T> =
  * // ExtractedDetailTypeOfNotify1Event is string.
  * ```
  */
-export type EventDetailOf<T, K extends keyof EventsOf<T> & string> =
-    T extends TypedCustomEventTarget<any, infer Events extends Record<string, any>> ? Events[K] : never;
+export type EventDetailOf<
+    T extends TypedCustomEventTarget<any, any>,
+    K extends keyof EventsOf<T> & string
+    > = EventsOf<T>[K];
 
 /**
  * A shorthand of TypedCustomEventListenerOrEventListenerObject.
@@ -159,8 +173,10 @@ export type EventDetailOf<T, K extends keyof EventsOf<T> & string> =
  */
 //export type ListenerFor<T, K extends keyof EventsOf<T> & string> =
 //    T extends TypedCustomEventTarget<any, any> ? TypedCustomEventListenerOrObject<T, K> : never;
-export type ListenerFor<T extends TypedCustomEventTarget<T, EventsOf<T>>, K extends keyof EventsOf<T> & string> =
-    TypedCustomEventListenerOrEventListenerObject<T, K>;
+export type ListenerFor<
+    T extends TypedCustomEventTarget<any, any>,
+    K extends keyof EventsOf<T> & string
+    > = TypedCustomEventListenerOrEventListenerObject<T, K>;
 
 // CustomEvent related type definitions
 export interface CustomEventListener<D>{
