@@ -2,45 +2,39 @@
 
 # TypedCustomEventTarget(tcet).
 
-強く型付けされた [EventTarget](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget)です。
-`currentTarget` と `detail` フィールド、`add/remove/dispatch` メソッドにイベントに応じた型が追加されます。
+強く型付けされた [EventTarget](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget)とその関連クラス群を含んだライブラリです。
+イベントの`type`, `currentTarget` と `detail` フィールド、
+イベントターゲットの`addEventListener`, `removeEventListener`, と `dispatchCustom` メソッドにイベント定義に応じた型や制約が追加されます。
 
 [![Current Release](https://img.shields.io/npm/v/tcet.svg)](https://www.npmjs.com/package/tcet)
 [![Licence](https://img.shields.io/github/license/takawitter/tcet)](https://github.com/takawitter/tcet/blob/master/LICENSE)
 
-
-## 作った動機
-
-2025年4月頃、`EventTarget`を使おうとして、TypeScriptのライブラリでは型がしっかり付いていないことに気づきました。
-他のライブラリも探してみましたが、`EventTarget.addEventListner` には型がついていても、`Event.currentTarget` や
-`EventTarget.dispatchEvent` にはないものしかなかったので、自作することにしました。
-
 ## 簡単な使い方
 
-イベントを発生させるクラスで `TypedCustomEventTarget` を継承し、型引数に自身の型とイベント名と詳細情報を定義した型を渡してください。
+イベントを発生させるクラスで `TypedCustomEventTarget` を継承して、自身の型とイベント定義を型パラメータに渡してください。
 すると、`addEventListener` などのメソッドが、それに渡すリスナーにまで型情報が付与された状態で定義されます。
 
 ```ts
-class MyClass extends TypedCustomEventTarget<MyClass, {hello: string}>{
-  func(){
-    this.dispatchCustomEvent('hello', 'world');
+class MyClass extends TypedCustomEventTarget<MyClass, {greeting: string}>{
+  fire(){
+    // 第一引数は'greeting'のみ。第二引数はstring型のみ。
+    this.dispatchCustomEvent('greeting', 'hello');
   }
 }
 
 const mc = new MyClass();
-mc.addEventListener('hello', ({type, currentTarget, detail})=>{
+mc.addEventListener('greeting', ({type, currentTarget, detail})=>{
   // typeは'hello'型, currentTargetは `MyClass`型, detailは `string`型
-  console.log(`hello ${detail}`);
+  console.log(`${detail}`);
 });
-mc.func(); // 'hello world' が出力される。
+mc.func(); // 'hello' が出力される。
 
 // リスナーを独立して定義するときは、`ListenerFor` を使うと便利です。
-const helloListener: ListenerFor<MyClass, 'hello'> = ({detail})=>{
-  // detailは `string`型
+const listener: ListenerFor<MyClass, 'greeting'> = ({detail})=>{
   console.log(`hello ${detail}`);
 };
-mc.addEventListener('hello', helloListener);
-mc.removeEventListener('hello', helloListener);
+mc.addEventListener('hello', listener);
+mc.removeEventListener('hello', listener);
 ```
 
 ## コード補完とタイプヒントの例
@@ -52,6 +46,10 @@ mc.removeEventListener('hello', helloListener);
 ### addEventListener
 
 ![addEventListener](./images/completion_addEventListener.png)
+
+### ListenerFor
+
+![ListenerFor](./images/completion_ListenerFor.png)
 
 ### detail field of event
 
@@ -161,7 +159,7 @@ mc.f1();
 mc.removeEventListener("hello", listener);
 ```
 
-### (FYI)追加の情報取得
+### (FYI)イベント関連情報の取得
 
 ```ts
 type EventsDefinitionOfMyClass = EventsOf<MyClass>; // -> {hello: {message: string}}
@@ -169,4 +167,3 @@ type DetailTypeOfHelloEvent = EventDetailOf<MyClass, "hello">; // -> {message: s
 ```
 
 `EventsOf<T>`で `T` で定義されたイベントの型の取得、`EventDetailOf<T, K>` で `T` で定義されたイベント `K` の詳細情報の型が取得できます。
-

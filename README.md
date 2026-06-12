@@ -2,18 +2,12 @@ English [日本語](README.ja.md)
 
 # TypedCustomEventTarget(tcet).
 
-A strictly typed [EventTarget](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget), with typed `currentTarget` and `detail` fields, and typed `add/remove/dispatch` methods.
+A strictly typed [EventTarget](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget) and related definitions.
+`type`, `currentTarget` and `detail` fields of event,
+and `addEventListener`, `removeEventListener` and `dispatcheCustomEvent` are typed as event definitions.
 
 [![Current Release](https://img.shields.io/npm/v/tcet.svg)](https://www.npmjs.com/package/tcet)
 [![Licence](https://img.shields.io/github/license/takawitter/tcet)](https://github.com/takawitter/tcet/blob/master/LICENSE)
-
-
-## Motivation
-
-As I researched at Apr. 2025, EventTarget or related libraries had
- untyped entities such as `Event.currentTarget` or `EventTarget.dispatchEvent`.
-This library provides more strictly typed entities with simplified interface
-to use event mechanism.
 
 ## Quick start
 
@@ -21,27 +15,26 @@ Define event target class that extends `TypedCustomEventTarget` and give self ty
 Then, strongly typed definitions including `addEventListener` or other methods will be defined automatically.
 
 ```ts
-class MyClass extends TypedCustomEventTarget<MyClass, {hello: string}>{
-  func(){
+class MyClass extends TypedCustomEventTarget<MyClass, {greeting: string}>{
+  fire(){
     // dispatchCustomEvent accepts event type and detail value those defined as the second parameter of TypedCustomEventTarget.
-    this.dispatchCustomEvent('hello', 'world');
+    this.dispatchCustomEvent('greeting', 'hello');
   }
 }
 
 const mc = new MyClass();
-mc.addEventListener('hello', ({type, currentTarget, detail})=>{
-  // type is 'hello' type. currentTarget is `MyClass` type. detail is `string` type.
-  console.log(`hello ${detail}`);
+mc.addEventListener('greeting', ({type, currentTarget, detail})=>{
+  // type is 'greeting' type. currentTarget is `MyClass` type. detail is `string` type.
+  console.log(`${detail}`);
 });
-mc.func(); // outputs 'hello world'
+mc.func(); // outputs 'hello'
 
 // `ListenerFor` creates the type of event listener for specific event.
-const helloListener: ListenerFor<MyClass, 'hello'> = ({detail})=>{
-  // detail is `string` type.
-  console.log(`hello ${detail}`);
+const listener: ListenerFor<MyClass, 'greeting'> = ({detail})=>{
+  console.log(`${detail}`);
 };
-mc.addEventListener('hello', helloListener);
-mc.removeEventListener('hello', helloListener);
+mc.addEventListener('hello', listener);
+mc.removeEventListener('hello', listener);
 ```
 
 ## Code completion and hinting examples
@@ -53,6 +46,10 @@ mc.removeEventListener('hello', helloListener);
 ### addEventListener
 
 ![addEventListener](./images/completion_addEventListener.png)
+
+### ListenerFor
+
+![ListenerFor](./images/completion_ListenerFor.png)
 
 ### detail field of event
 
