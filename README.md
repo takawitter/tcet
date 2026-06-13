@@ -13,6 +13,10 @@ Only 242 bytes of [es format JavaScript code](./dist/tcet.es.js) will be generat
 
 ## Quick start
 
+```bash
+npm i tcet
+```
+
 Define event target class that extends `TypedCustomEventTarget` and give self type and events definition as the value of type parameter.
 Then, strongly typed definitions including `addEventListener` or other methods will be defined automatically.
 
@@ -108,12 +112,6 @@ In addition to standard `EventTarget` or related libraries, tcet has following d
   * `detail`. The type is the detail type of event `K`. This field is defined by the base class `CustomEvent<D>`. `TypedCustomEvent<T, K>` extract `D` from the definition of `T` and pass it to `D` of `CustomEvent<D>`.
 
 The code added by tcet is only the implementation of `dispatchEvent` method. Other codes are used for type cheking in compile time and have no effect to generated code by static build.
-
-## Install
-
-```bash
-npm i tcet
-```
 
 ## Example 1
 
