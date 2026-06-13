@@ -30,7 +30,7 @@ class MyClass extends TypedCustomEventTarget<MyClass, {greeting: string}>{
 
 const mc = new MyClass();
 mc.addEventListener('greeting', ({type, currentTarget, detail})=>{
-  // typeは'hello'型, currentTargetは `MyClass`型, detailは `string`型
+  // typeは'greeting'型, currentTargetは `MyClass`型, detailは `string`型
   console.log(`${detail}`);
 });
 mc.fire(); // 'hello' が出力される。
