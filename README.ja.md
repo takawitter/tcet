@@ -29,14 +29,14 @@ mc.addEventListener('greeting', ({type, currentTarget, detail})=>{
   // typeは'hello'型, currentTargetは `MyClass`型, detailは `string`型
   console.log(`${detail}`);
 });
-mc.func(); // 'hello' が出力される。
+mc.fire(); // 'hello' が出力される。
 
 // リスナーを独立して定義するときは、`ListenerFor` を使うと便利です。
 const listener: ListenerFor<MyClass, 'greeting'> = ({detail})=>{
-  console.log(`hello ${detail}`);
+  console.log(`${detail}`);
 };
-mc.addEventListener('hello', listener);
-mc.removeEventListener('hello', listener);
+mc.addEventListener('greeting', listener);
+mc.removeEventListener('greeting', listener);
 ```
 
 ## コード補完とタイプヒントの例

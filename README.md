@@ -29,14 +29,14 @@ mc.addEventListener('greeting', ({type, currentTarget, detail})=>{
   // type is 'greeting' type. currentTarget is `MyClass` type. detail is `string` type.
   console.log(`${detail}`);
 });
-mc.func(); // outputs 'hello'
+mc.fire(); // outputs 'hello'
 
 // `ListenerFor` creates the type of event listener for specific event.
 const listener: ListenerFor<MyClass, 'greeting'> = ({detail})=>{
   console.log(`${detail}`);
 };
-mc.addEventListener('hello', listener);
-mc.removeEventListener('hello', listener);
+mc.addEventListener('greeting', listener);
+mc.removeEventListener('greeting', listener);
 ```
 
 ## Code completion and type hinting
