@@ -1,10 +1,12 @@
-class s extends EventTarget {
-  dispatchEvent(e, t) {
+const s = CustomEvent;
+class o extends EventTarget {
+  dispatchEvent(t, e) {
     return super.dispatchEvent(
-      e instanceof Event ? e : new CustomEvent(e, t)
+      t instanceof Event ? t : new CustomEvent(t, e)
     );
   }
 }
 export {
-  s as TypedCustomEventTarget
+  s as TypedCustomEvent,
+  o as TypedCustomEventTarget
 };

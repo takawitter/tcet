@@ -11,6 +11,14 @@ export interface TypedCustomEvent<T extends TypedCustomEventTarget<any, any>, K 
     readonly currentTarget: T;
 }
 /**
+ * To eliminate extra code generation, reuse the constructor of CustomEvent as the one of TypedCustomEvent.
+ */
+type InitArg<D> = [D] extends [void] ? [EventInit?] : [CustomEventInit<D>];
+export interface TypedCustomEventConstructor {
+    new <T extends TypedCustomEventTarget<any, any>, K extends KeyOf<EventsOf<T>>>(type: K, ...eventInitDict: InitArg<EventDetailOf<T, K>>): TypedCustomEvent<T, K>;
+}
+export declare const TypedCustomEvent: TypedCustomEventConstructor;
+/**
  * The typed version of EventListener.
  *
  * @template T the class that dispatched and the source of this Event.
@@ -51,7 +59,7 @@ export type TypedCustomEventListenerOrEventListenerObject<T extends TypedCustomE
  * class MyClass extends TypedCustomEventTarget<MyClass, MyEvents>{
  *     function fire1(){
  *         // code completion available
- *         this.dispatchEvent("notify1", "hello");
+ *         this.dispatchEvent("notify1", {detail: "hello"});
  *     }
  * }
  *
