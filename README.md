@@ -75,7 +75,7 @@ class MyClass extends TypedCustomEventTarget<MyClass, {greeting: string, foo: vo
     this.dispatchEvent("greeting");  // NG
     this.dispatchEvent("foo");  // OK
     this.dispatchEvent("foo", {cancelable: true});  // OK
-    this.dispatchEvent("var");  // NG
+    this.dispatchEvent("bar");  // NG
     this.dispatchEvent(new Event("greeting", {detail: "hello"}));  // NG
     this.dispatchEvent(new CustomEvent("greeting", {detail: "hello"}));  // NG
     this.dispatchEvent(new TypedCustomEvent("greeting", {detail: "hello"}));  // OK
