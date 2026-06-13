@@ -8,13 +8,24 @@
  */
 export interface TypedCustomEvent<
     T extends TypedCustomEventTarget<any, any>,
-    K extends keyof EventsOf<T> & string
+    K extends KeyOf<EventsOf<T>>
     >
     extends CustomEvent<EventDetailOf<T, K>>
 {
     readonly type: K;
     readonly currentTarget: T;
 }
+/**
+ * TypedCustomEvents uses the prototype of CustomEvent to eliminate an extra code generation.
+ */
+type InitArg<D> = [D] extends [void] ? [EventInit?] : [CustomEventInit<D>]; 
+declare var TypedCustomEvent: {
+    prototype: CustomEvent;
+    new<
+        T extends TypedCustomEventTarget<any, any>,
+        K extends KeyOf<EventsOf<T>>
+    >(type: K, ...eventInitDict: InitArg<EventDetailOf<T, K>>): TypedCustomEvent<T, K>;
+};
 
 /**
  * The typed version of EventListener.
@@ -24,7 +35,7 @@ export interface TypedCustomEvent<
  */
 export interface TypedCustomEventListener<
     T extends TypedCustomEventTarget<any, any>,
-    K extends keyof EventsOf<T> & string>
+    K extends KeyOf<EventsOf<T>>>
 {
     (this: T, evt: TypedCustomEvent<T, K>): void | Promise<void>;
 }
@@ -37,7 +48,7 @@ export interface TypedCustomEventListener<
  */
 export interface TypedCustomEventListenerObject<
     T extends TypedCustomEventTarget<any, any>,
-    K extends keyof EventsOf<T> & string>
+    K extends KeyOf<EventsOf<T>>>
 {
     handleEvent(evt: TypedCustomEvent<T, K>): void | Promise<void>;
 }
@@ -50,7 +61,7 @@ export interface TypedCustomEventListenerObject<
  */
 export type TypedCustomEventListenerOrEventListenerObject<
     T extends TypedCustomEventTarget<any, any>,
-    K extends keyof EventsOf<T> & string
+    K extends KeyOf<EventsOf<T>>
     > = TypedCustomEventListener<T, K> | TypedCustomEventListenerObject<T, K>;
 
 /**
@@ -69,7 +80,7 @@ export type TypedCustomEventListenerOrEventListenerObject<
  * class MyClass extends TypedCustomEventTarget<MyClass, MyEvents>{
  *     function fire1(){
  *         // code completion available
- *         this.dispatchCustomEvent("notify1", "hello");
+ *         this.dispatchEvent("notify1", "hello");
  *     }
  * }
  * 
@@ -86,22 +97,29 @@ export interface TypedCustomEventTarget<
     T extends TypedCustomEventTarget<T, Events>,
     Events extends Record<string, any>
 > extends EventTarget {
-    addEventListener<K extends keyof Events & string>(
-        type: K, listener: TypedCustomEventListenerOrEventListenerObject<T, K> | null,
+    addEventListener<K extends KeyOf<Events>>(
+        type: K, listener: ListenerFor<T, K> | null,
         options?: AddEventListenerOptions | boolean): void;
-    removeEventListener<K extends keyof Events & string>(
-        type: K, listener: TypedCustomEventListenerOrEventListenerObject<T, K> | null,
+    removeEventListener<K extends KeyOf<Events>>(
+        type: K, listener: ListenerFor<T, K> | null,
         options?: EventListenerOptions | boolean): void;
 }
-type EventArgs<T> = [T] extends [void] ? [] : [detail: T];
+type KeyOf<Events> = keyof Events & string;
+type EventInitDictArg<Events, K extends KeyOf<Events>> =
+    Events[K] extends void ? [] | [eventInitDict: CustomEventInit<Events[K]>] : [eventInitDict: CustomEventInit<Events[K]>];
 export class TypedCustomEventTarget<
     T extends TypedCustomEventTarget<T, Events>,
     Events extends Record<string, any>
 > extends EventTarget {
     declare readonly __eventsType: Events;
-    dispatchCustomEvent<K extends keyof Events & string>(
-        type: K, ...args: EventArgs<Events[K]>): boolean{
-        return super.dispatchEvent(new CustomEvent(type, ...args));
+    dispatchEvent(event: TypedCustomEvent<T, any>): boolean;
+    dispatchEvent<K extends KeyOf<Events>>(
+        type: K, ...eventInitDict: EventInitDictArg<Events, K>
+    ): boolean;
+    dispatchEvent(typeOrEvent: string | Event, eventInitDict?: CustomEventInit): boolean {
+        return super.dispatchEvent(
+            typeOrEvent instanceof Event ? typeOrEvent : new CustomEvent(typeOrEvent, eventInitDict)
+        );
     }
 }
 
@@ -148,7 +166,7 @@ export type EventsOf<T extends TypedCustomEventTarget<any, any>> =
  */
 export type EventDetailOf<
     T extends TypedCustomEventTarget<any, any>,
-    K extends keyof EventsOf<T> & string
+    K extends KeyOf<EventsOf<T>>
     > = EventsOf<T>[K];
 
 /**
@@ -175,7 +193,7 @@ export type EventDetailOf<
 //    T extends TypedCustomEventTarget<any, any> ? TypedCustomEventListenerOrObject<T, K> : never;
 export type ListenerFor<
     T extends TypedCustomEventTarget<any, any>,
-    K extends keyof EventsOf<T> & string
+    K extends KeyOf<EventsOf<T>>
     > = TypedCustomEventListenerOrEventListenerObject<T, K>;
 
 // CustomEvent related type definitions

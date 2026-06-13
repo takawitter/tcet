@@ -4,7 +4,7 @@ English [日本語](README.ja.md)
 
 A strictly typed [EventTarget](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget) and related definitions.
 `type`, `currentTarget` and `detail` fields of event,
-and `addEventListener`, `removeEventListener` and `dispatcheCustomEvent` are typed as event definitions.
+and `addEventListener`, `removeEventListener` and `dispatcheEvent` are typed as event definitions.
 
 [![Current Release](https://img.shields.io/npm/v/tcet.svg)](https://www.npmjs.com/package/tcet)
 [![Licence](https://img.shields.io/github/license/takawitter/tcet)](https://github.com/takawitter/tcet/blob/master/LICENSE)
@@ -17,8 +17,8 @@ Then, strongly typed definitions including `addEventListener` or other methods w
 ```ts
 class MyClass extends TypedCustomEventTarget<MyClass, {greeting: string}>{
   fire(){
-    // dispatchCustomEvent accepts event type and detail value those defined as the second parameter of TypedCustomEventTarget.
-    this.dispatchCustomEvent('greeting', 'hello');
+    // dispatchEvent accepts event type and detail value those defined as the second parameter of TypedCustomEventTarget.
+    this.dispatchEvent('greeting', {detail: 'hello'});
   }
 }
 
@@ -37,11 +37,11 @@ mc.addEventListener('hello', listener);
 mc.removeEventListener('hello', listener);
 ```
 
-## Code completion and hinting examples
+## Code completion and type hinting
 
-### dispatchCustomEvent
+### dispatchEvent
 
-![dispatchCustomEvent](./images/completion_dispatchCustomEvent.png)
+![dispatchEvent](./images/completion_dispatchEvent.png)
 
 ### addEventListener
 
@@ -63,19 +63,49 @@ mc.removeEventListener('hello', listener);
 
 ![typeOfEvent](./images/hint_type.png)
 
+## Type checking
+
+```ts
+class MyClass extends TypedCustomEventTarget<MyClass, {greeting: string, foo: void}>{
+  fire(){
+    this.dispatchEvent("greeting", {detail: "hello"});  // OK
+    this.dispatchEvent("greeting", {detail: "hello", cancelable: true});  // OK
+    this.dispatchEvent("greeting");  // NG
+    this.dispatchEvent("foo");  // OK
+    this.dispatchEvent("foo", {cancelable: true});  // OK
+    this.dispatchEvent("var");  // NG
+    this.dispatchEvent(new Event("greeting", {detail: "hello"}));  // NG
+    this.dispatchEvent(new CustomEvent("greeting", {detail: "hello"}));  // NG
+    this.dispatchEvent(new TypedCustomEvent("greeting", {detail: "hello"}));  // OK
+    this.dispatchEvent(new TypedCustomEvent("greeting"));  // NG
+    this.dispatchEvent(new TypedCustomEvent("foo", {cancelable: true}));  // OK
+    this.dispatchEvent(new TypedCustomEvent("foo"));  // OK
+  }
+}
+const mc = new MyClass();
+const gl: ListenerFor<MyClass, "greeting"> = ({detail})=>{
+    console.log(detail);
+};
+const fl: ListenerFor<MyClass, "foo"> = ()=>{};
+mc.addEventListener('greeting', gl);  // OK
+mc.addEventListener('foo', gl);  // NG
+mc.addEventListener('bar', fl);  // NG
+mc.addEventListener('foo', null);  // OK
+```
+
 ## Features
 
 In addition to standard `EventTarget` or related libraries, tcet has following definitions.
 
 * An base class of event target class `TypedCustomEventTarget<T, Events>`. This class extends [EventTarget](https://github.com/microsoft/TypeScript-DOM-lib-generator/blob/main/baselines/dom.generated.d.ts#L11854). `T` is the event target class and `Events` is the definition of events that consists of pairs of event name and detail class. This class has following methods.
   * `addEventListener` and `removeEventListener`. These methods add or remove the event listener for specific events. These methods is defined as overload method for each event definition. (This technic is already used in other library [typescript-event-target](https://www.npmjs.com/package/typescript-event-target))
-  * `dispatchCustomEvent(type: K, detail: D)`. This method dispatches specific event. This method is also defined as overload method for each events. Events are defined in `Events` type as `K: D` style. `K` is the event name and `D` is the type that defines the detail information of event (see example section below for details).
+  * `dispatchEvent(type: K, eventInitDict: CustomEventInit<D>)`. This method dispatches specific event. This method is also defined as overload method for each events. Events are defined in `Events` type as `K: D` style. `K` is the event name and `D` is the type that defines the detail information of event (see example section below for details).
 * Typed event class `TypedCustomEvent<T, K>`. This class extends [CustomEvent&lt;D&gt;](https://github.com/microsoft/TypeScript-DOM-lib-generator/blob/main/baselines/dom.generated.d.ts#L8830). `T` is the event target class and `K` is the name of an event. This class has following fields.
   * `type`. The type is `K`.
   * `currentTarget`. The type is the event target class `T`.
   * `detail`. The type is the detail type of event `K`. This field is defined by the base class `CustomEvent<D>`. `TypedCustomEvent<T, K>` extract `D` from the definition of `T` and pass it to `D` of `CustomEvent<D>`.
 
-The code added by tcet is only the implementation of `dispatchCustomEvent` method. Other codes are used for type cheking in compile time and have no effect to generated code by static build.
+The code added by tcet is only the implementation of `dispatchEvent` method. Other codes are used for type cheking in compile time and have no effect to generated code by static build.
 
 ## Install
 
@@ -102,13 +132,13 @@ import { TypedCustomEventTarget } from "tcet";
 
 class MyClass extends TypedCustomEventTarget<MyClass, MyClassEvents>{
   f1(){
-    // You can fire event by calling dispatchCustomEvent.
-    // This is effectively same as dispatchEvent(new CustomEvent("notify1", "hello")).
+    // You can fire event by calling dispatchEvent.
+    // This is effectively same as dispatchEvent(new TypedCustomEvent("notify1", {detail: "hello"})).
     // Code completion available from IDE(i.e. VSCode).
-    this.dispatchCustomEvent("notify1", "hello");
+    this.dispatchEvent("notify1", {detail: "hello"});
   }
   f2(){
-    this.dispatchCustomEvent("notify2", 100);
+    this.dispatchEvent("notify2", {detail: 100});
   }
 }
 ```
@@ -140,7 +170,7 @@ class MyClass extends TypedCustomEventTarget<MyClass, {
   }
 }>{
   f1(){
-    this.dispatchCustomEvent("hello", {message: "hello"});
+    this.dispatchEvent("hello", {detail: {message: "hello"}});
   }
 }
 ```
