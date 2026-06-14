@@ -77,15 +77,21 @@ class MyClass extends TypedCustomEventTarget<MyClass, {greeting: string, foo: vo
     this.dispatchEvent("greeting", {detail: "hello"});  // OK
     this.dispatchEvent("greeting", {detail: "hello", cancelable: true});  // OK
     this.dispatchEvent("greeting");  // NG
+    this.dispatchEvent("greeting", {});  // NG
     this.dispatchEvent("foo");  // OK
     this.dispatchEvent("foo", {cancelable: true});  // OK
+    this.dispatchEvent("foo", {detail: "hello"});  // NG
     this.dispatchEvent("bar");  // NG
     this.dispatchEvent(new Event("greeting", {detail: "hello"}));  // NG
     this.dispatchEvent(new CustomEvent("greeting", {detail: "hello"}));  // NG
     this.dispatchEvent(new TypedCustomEvent("greeting", {detail: "hello"}));  // OK
+    this.dispatchEvent(new TypedCustomEvent("greeting", {detail: "hello", cancelable: true}));  // OK
     this.dispatchEvent(new TypedCustomEvent("greeting"));  // NG
-    this.dispatchEvent(new TypedCustomEvent("foo", {cancelable: true}));  // OK
+    this.dispatchEvent(new TypedCustomEvent("greeting", {}));  // NG
     this.dispatchEvent(new TypedCustomEvent("foo"));  // OK
+    this.dispatchEvent(new TypedCustomEvent("foo", {cancelable: true}));  // OK
+    this.dispatchEvent(new TypedCustomEvent("foo", {detail: "hello"}));  // NG
+    this.dispatchEvent(new TypedCustomEvent("bar"));  // NG
   }
 }
 const mc = new MyClass();
@@ -95,8 +101,8 @@ const gl: ListenerFor<MyClass, "greeting"> = ({detail})=>{
 const fl: ListenerFor<MyClass, "foo"> = ()=>{};
 mc.addEventListener('greeting', gl);  // OK
 mc.addEventListener('foo', gl);  // NG
-mc.addEventListener('bar', fl);  // NG
 mc.addEventListener('foo', null);  // OK
+mc.addEventListener('bar', fl);  // NG
 ```
 
 ## Features
