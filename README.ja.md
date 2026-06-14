@@ -110,8 +110,8 @@ mc.addEventListener('bar', fl);  // NG
 TypeScriptの `EventTarget` をベースに、以下の拡張を行っています。
 
 * イベントターゲットのベースクラス `TypedCustomEventTarget<T, Events>` が追加されています。これは [EventTarget](https://github.com/microsoft/TypeScript-DOM-lib-generator/blob/main/baselines/dom.generated.d.ts#L11854) を継承したクラスで、`T` はイベントターゲットのクラス、`Events` はイベント名とイベント発生時の詳細情報を定義したクラスです。以下のメソッドを持ちます。
-  * `addEventListener` と `removeEventListener`。特定のイベントを受け取るリスナを追加または削除します。`TypedCustomEventTarget`に渡された `Events` 内の定義毎にオーバーロードが定義されます。(種類毎のオーバーロード定義は、既存のライブラリ [typescript-event-target](https://www.npmjs.com/package/typescript-event-target) でも使われている手法です)
-  * `dispatchEvent(type: K, eventInitDict: CustomEventInit<D>)`。イベントのディスパッチを行うメソッドです。`TypedCustomEventTarget` に渡された `Events` 内の定義毎にオーバーロードが定義されます。イベントは `Events` 内で `K: D` の形式で定義でき、`K` がイベント名、`D` がイベントの詳細情報を格納する型です。(詳細は利用例を参照)
+  * `addEventListener` と `removeEventListener`。特定のイベントを受け取るリスナを追加または削除します。オーバーロードメソッドのように `TypedCustomEventTarget`に渡された `Events` 内の定義に応じたイベントタイプやリスナを受け付けます。(既存のライブラリ [typescript-event-target](https://www.npmjs.com/package/typescript-event-target) でも使われている手法を使用しています)
+  * `dispatchEvent`。イベントのディスパッチを行うメソッドです。`type` と `eventInit` の引数を受け付けるものと、`TypedCustomEvent` 1つを受け付けるものの2つのバージョンがあります。`type` は `TypedCustomEventTarget` に渡された `Events` 定義内のキーです。`eventInitDict` はイベントのオプションを指定するオブジェクトで、イベント詳細 `detail: D` に加え、 `cancelable` など既存の `Event` が持つオプションも含められます。イベントは `Events` 内で `K: D` の形式で定義でき、`K` がイベント名となるキー、`D` がイベントの詳細情報を格納する型です。(詳細は利用例を参照)
 * イベント `TypedCustomEvent<T, K>` は [CustomEvent&lt;D&gt;](https://github.com/microsoft/TypeScript-DOM-lib-generator/blob/main/baselines/dom.generated.d.ts#L8830)を継承したクラスで、`T` はイベントターゲットのクラス、`K` はイベント名を表します。以下のフィールドを持ちます。
   * `type`。型は `K` になります。
   * `currentTarget`。型はイベントターゲットのクラスである `T` です。
