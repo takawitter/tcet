@@ -1,50 +1,22 @@
-import { beforeEach, expect, test } from "vitest";
-import { TypedCustomEvent, TypedCustomEventInit, TypedCustomEventTarget } from "../src/tcet.ts";
+import { expect, test, vi } from "vitest";
+import { TypedCustomEvent, TypedCustomEventTarget } from "../src/tcet.ts";
 
-class MyEt extends TypedCustomEventTarget<MyEt, {
-    greeting: string
-}>{
-    greetingEvent(init: TypedCustomEventInit<string>){
-        return new TypedCustomEvent<MyEt, "greeting">("greeting", init);
-    }
-}
+class MyEventTarget extends TypedCustomEventTarget<MyEventTarget, {greeting: string}>{}
 
-function newEt(){
-    return new MyEt();
-}
-
-test("dispatchEvent() should return true when no listener.", ()=>{
-    const et = newEt();
-    const e = et.greetingEvent({detail: "hello"});
-    const cont = et.dispatchEvent(e);
-    expect(cont).toBe(true);
-    expect(e.defaultPrevented).toBe(false);
+test("dispatchEvent() should create and dispatch events to listener.", ()=>{
+    const et = new MyEventTarget();
+    const handler = vi.fn();
+    et.addEventListener("greeting", handler);
+    et.dispatchEvent("greeting", {detail: "hello"});
+    expect(handler).toHaveBeenCalledOnce();
+    expect(handler.mock.calls[0][0].detail).toBe("hello");
 });
 
-test("dispatchEvent() should return false when a listener called preventDefault().", ()=>{
-    const et = newEt();
-    const e = et.greetingEvent({cancelable: true, detail: "hello"});
-    et.addEventListener("greeting", e=>{
-        console.log(e);
-        e.preventDefault();
-    }, {passive: false});
-    const cont = et.dispatchEvent(e);
-    expect(cont).toBe(false);
-    expect(e.defaultPrevented).toBe(true);
-});
-
-test("dispatchEvent() should return false when a listener called preventDefault().", ()=>{
-    const et = newEt();
-    const e = et.greetingEvent({cancelable: true, detail: "hello"});
-    et.addEventListener("greeting", e=>{
-        console.log(e);
-        e.preventDefault();
-    }, {passive: false});
-    let propagationStopped = false;
-    e.stopPropagation = ()=>{
-        propagationStopped = true;
-    };
-    const cont = et.dispatchEvent(e);
-    expect(cont).toBe(false);
-    expect(e.defaultPrevented).toBe(true);
+test("dispatchEvent() should dispatch events to listener.", ()=>{
+    const et = new MyEventTarget();
+    const handler = vi.fn();
+    et.addEventListener("greeting", handler);
+    et.dispatchEvent(new TypedCustomEvent("greeting", {detail: "hello"}));
+    expect(handler).toHaveBeenCalledOnce();
+    expect(handler.mock.calls[0][0].detail).toBe("hello");
 });
