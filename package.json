@@ -26,8 +26,10 @@
   ],
   "scripts": {
     "build": "tsc && vite build",
+    "prepare": "npm run build",
     "preview": "vite preview",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "testWatch": "vitest"
   },
   "repository": {
     "type": "git",
@@ -52,8 +54,9 @@
   },
   "homepage": "https://github.com/takawitter/tcet",
   "devDependencies": {
-    "typescript": "~5.8.3",
-    "vite": "^6.3.5"
-  },
-  "dependencies": {}
+    "@vitest/browser-playwright": "^4.1.9",
+    "typescript": "^6.0.3",
+    "vite": "^8.1.0",
+    "vitest": "^4.1.9"
+  }
 }

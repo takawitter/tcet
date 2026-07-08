@@ -13,7 +13,7 @@ export interface TypedCustomEvent<T extends TypedCustomEventTarget<any, any>, K 
 /**
  * To eliminate extra code generation, reuse the constructor of CustomEvent as the one of TypedCustomEvent.
  */
-interface TypedCustomEventInit<D> extends CustomEventInit<D> {
+export interface TypedCustomEventInit<D> extends CustomEventInit<D> {
     detail: D;
 }
 type EventInitDictArg<D> = D extends void ? [

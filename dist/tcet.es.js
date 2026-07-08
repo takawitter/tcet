@@ -1,12 +1,8 @@
-const s = CustomEvent;
-class o extends EventTarget {
-  dispatchEvent(t, e) {
-    return super.dispatchEvent(
-      t instanceof Event ? t : new CustomEvent(t, e)
-    );
-  }
-}
-export {
-  s as TypedCustomEvent,
-  o as TypedCustomEventTarget
+//#region src/tcet.ts
+var e = CustomEvent, t = class extends EventTarget {
+	dispatchEvent(e, t) {
+		return super.dispatchEvent(e instanceof Event ? e : new CustomEvent(e, t));
+	}
 };
+//#endregion
+export { e as TypedCustomEvent, t as TypedCustomEventTarget };

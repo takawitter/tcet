@@ -1,1 +1,3 @@
 /node_modules
+/.vitest-attachments
+/test/__screenshots__
