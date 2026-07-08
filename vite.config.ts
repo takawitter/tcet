@@ -8,5 +8,12 @@ export default defineConfig({
       formats: ["es", "umd"],
       fileName: (format) => `tcet.${format}.js`,      
     },
+    rolldownOptions: {
+      output: {
+        minify: {
+          compress: true
+        }
+      }
+    },
   },
 });

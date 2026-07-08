@@ -6,7 +6,7 @@
 イベントの`type`, `currentTarget` と `detail` フィールド、
 イベントターゲットの`addEventListener`, `removeEventListener`, と `dispatchEvent` メソッドにイベント定義に応じた型や制約が追加されます。
 
-静的ビルドで生成される[es形式のJavaScriptコード](./dist/tcet.es.js)は、242bytesのみです。
+静的ビルドで生成される[es形式のJavaScriptコード](./dist/tcet.es.js)は、195bytesのみです。
 
 [![Current Release](https://img.shields.io/npm/v/tcet.svg)](https://www.npmjs.com/package/tcet)
 [![Licence](https://img.shields.io/github/license/takawitter/tcet)](https://github.com/takawitter/tcet/blob/master/LICENSE)
